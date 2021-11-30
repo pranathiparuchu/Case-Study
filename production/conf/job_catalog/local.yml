@@ -1,0 +1,119 @@
+jobs:
+  - name: data-cleaning
+    stages:
+        - name: 'clean-base-tables'
+          tasks:
+            - name: 'clean-all-tables'
+              params: {}
+        - name: 'clean-consolidated-data'
+          tasks:
+            - name: 'clean-churn-dataset'
+              params: 
+                column_for_churn: 'pri_sales_amount'
+                ref_date: '2013-05-01'
+        - name: 'train-test-split'
+          tasks:
+            - name: 'train-test'
+              params:
+                target_col: target
+                test_size: 0.2
+              
+  - name: feat-engg
+    stages:
+        - name: 'feature-pipelines'
+          tasks:
+            - name: 'transform-features'
+              params: 
+                ref_date: '2013-05-01'
+                train_sample_fraction: 0.9
+                correlation_threshold: 0.6
+                windows_for_features: [3, 6]
+                overall_avg: True
+                agg_methods:
+                  'primary_sales':
+                    'agg_type': ['rolling', 'cumulative']
+                    'feature_col': 'pri_sales_amount'
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'secondary_sales':
+                    'agg_type': ['rolling', 'cumulative']
+                    'feature_col': 'sec_ind_bpm_actuals'
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'order_alloc':
+                    'agg_type': ['cumulative']
+                    'feature_col': 'simple avg allocated percent'
+                    'window': None
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'coverage_data':
+                    'feature_col': 'daily_coverage_perc'
+                    'agg_type': ['rolling']
+                    'window': [6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'profit_data':
+                    'agg_type': ['rolling', 'cumulative']
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'retail_program':
+                    'agg_type': ['rolling', 'cumulative']
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'business_data':
+                    'agg_type': ['rolling', 'cumulative']
+                    'feature_col': 'ec'
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'app_order_data':
+                    'agg_type': ['rolling']
+                    'feature_col': 'labor_in_person_days'
+                    'data_path': "/cleaned/ordered_with_app"
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'withoutapp_order_data':
+                    'agg_type': ['rolling']
+                    'feature_col': 'labor_in_person_days'
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                  'retail_data':
+                    'agg_type': ['rolling']
+                    'window': [3,6]
+                    'method': 'mean'
+                    'group_by_col': 'customer_code'
+                outlier: 
+                  method: percentile
+                  lb: 0.01
+                  ub: 0.99
+                  drop: True
+
+  - name: model-gen
+    stages:
+        - name: 'model-creation'
+          tasks:
+            - name: 'train-model'
+              params: 
+                train_sample_fraction: 0.9
+                estimator: 'random_forest'
+                grid_best_params: 
+                  criterion: gini
+                  max_depth: 4
+                  max_features: auto
+                  n_estimators: 200
+                imp_features: ['policy_count_pend', 'overall_avg_simple avg allocated percent', 'last_3_months_avg_ec', 'last_3_months_avg_non_wholesale_net_value', 'last_3_months_avg_roi_with_udaan_with_sub', 'days_in_business', 'policy_count_withp', 'last_3_months_avg_bandhan_net_val', 'policy_count_beyop', 'overall_avg_otherpgrm_net_val']
+
+
+  - name: model-eval
+    stages:
+        - name: 'model-predict'
+          tasks:
+            - name: 'score-model'
+              params:
+                imp_features: ['policy_count_pend', 'overall_avg_simple avg allocated percent', 'last_3_months_avg_ec', 'last_3_months_avg_non_wholesale_net_value', 'last_3_months_avg_roi_with_udaan_with_sub', 'days_in_business', 'policy_count_withp', 'last_3_months_avg_bandhan_net_val', 'policy_count_beyop', 'overall_avg_otherpgrm_net_val']

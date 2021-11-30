@@ -1,0 +1,196 @@
+datasets:
+  raw:
+    doj:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/date_of_joining.csv
+      driver_params: {}
+
+    no_obj:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/no_objection.csv
+      driver_params: {}
+    
+    pri_bpm:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/sales.csv
+      driver_params: {}
+
+    sec_bpm:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/net_value.csv
+      driver_params: {}
+    
+    order_alloc:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/orders.csv
+      driver_params: {}
+
+    orders_and_allocated_reason:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/orders_extended.csv
+      driver_params: {}
+
+    returns:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/returns.csv
+      driver_params: {}
+
+    coverage:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/monthly_coverage.csv
+      driver_params: {}
+
+    retail_program:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/retail_outlet.csv
+      driver_params: {}
+
+    ec:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/business.csv
+      driver_params: {}
+
+    ordered_with_app:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/ordered_with_app.csv
+      driver_params: {}
+
+    ordered_without_app:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/ordered_without_app.csv
+      driver_params: {}
+
+    dist_retail_invoice:
+      type: ds
+      format: csv
+      uri: ${core.data_base_path}/raw/attrition/invoice.csv
+      driver_params: {}
+  cleaned:
+    doj:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/date_of_joining.parquet
+      driver_params: {}
+
+    no_obj:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/no_objection.parquet
+      driver_params: {}
+      
+    pri_bpm:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/sales.parquet
+      driver_params: {}
+
+    sec_bpm:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/net_value.parquet
+      driver_params: {}
+    
+    order_alloc:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/orders.parquet
+      driver_params: {}
+
+    orders_and_allocated_reason:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/orders_extended.parquet
+      driver_params: {}
+
+    returns:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/returns.parquet
+      driver_params: {}
+
+    coverage:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/monthly_coverage.parquet
+      driver_params: {}
+
+    retail_program:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/retail_outlet.parquet
+      driver_params: {}
+
+    ec:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/business.parquet
+      driver_params: {}
+
+    ordered_with_app:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/ordered_with_app.parquet
+      driver_params: {}
+
+    ordered_without_app:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/ordered_without_app.parquet
+      driver_params: {}
+
+    dist_retail_invoice:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/cleaned/attrition/invoice.parquet
+      driver_params: {}
+  processed:
+    attrition:
+      type: ds
+      format: parquet
+      uri: ${core.data_base_path}/processed/attrition.parquet
+      driver_params: {}
+  train:
+    attrition:
+      features:
+        type: ds
+        format: parquet
+        uri: ${core.data_base_path}/train/attrition/features.parquet
+        driver_params: {}
+
+      target:
+        type: ds
+        format: parquet
+        uri: ${core.data_base_path}/train/attrition/target.parquet
+        driver_params: {}
+  test:
+    attrition:
+      features:
+        type: ds
+        format: parquet
+        uri: ${core.data_base_path}/test/attrition/features.parquet
+        driver_params: {}
+
+      target:
+        type: ds
+        format: parquet
+        uri: ${core.data_base_path}/test/attrition/target.parquet
+        driver_params: {}
+  score:
+    attrition:
+      output:
+        type: ds
+        format: parquet
+        uri: ${core.data_base_path}/test/attrition/scored_output.parquet
+        driver_params: {}
